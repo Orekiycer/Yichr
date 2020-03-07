@@ -1,0 +1,174 @@
+{% extends 'common/base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <!-- Latest Posts -->
+            <main class="posts-listing col-lg-8">
+                <div class="container">
+                    <div class="row">
+                        <!-- post -->
+                        {% for _ in range(0,art_num,2) %}
+                            <div class="post col-xl-6">
+                                <div class="post-thumbnail"><a href="{{ url_for('jk.cont', id = art[_][0].aid) }}"><img src="{{ art[_][0].picture }}"
+                                                                                     alt="..." class="img-fluid"></a>
+                                </div>
+                                <div class="post-details">
+                                    <div class="post-meta d-flex justify-content-between">
+                                        <div class="date meta-last">{{ art[_][0].create_time }}</div>
+                                        <div class="category"><a href="#">Business</a></div>
+                                    </div>
+                                    <a href="post.html">
+                                        <h3 class="h4">{{ art[_][0].title }}</h3></a>
+                                    <p class="text-muted">{{ art[_][0].content }}</p>
+                                    <footer class="post-footer d-flex align-items-center"><a href="{{ url_for('jk.cont', id = art[_][0].aid) }}"
+                                                                                             class="author d-flex align-items-center flex-wrap">
+                                        <div class="avatar"><img src="/static/img/lolt.png" alt="..."
+                                                                 class="img-fluid"></div>
+                                        <div class="title"><span>John Doe</span></div>
+                                    </a>
+                                        <div class="date"><i class="icon-clock"></i> 2 Months Ago</div>
+                                        <div class="comments meta-last"><i class="icon-comment"></i>{{art[_][0].hits}}</div>
+                                    </footer>
+                                </div>
+                            </div>
+                            {% if _ < art_num - 1 %}
+
+
+                                <!-- post             -->
+                                <div class="post col-xl-6">
+                                    <div class="post-thumbnail"><a href="{{ url_for('jk.cont', id = art[_+1][0].aid) }}"><img src="{{ art[_+1][0].picture}}"
+                                                                                         alt="..."
+                                                                                         class="img-fluid"></a>
+                                    </div>
+                                    <div class="post-details">
+                                        <div class="post-meta d-flex justify-content-between">
+                                            <div class="date meta-last">20 May | 2016</div>
+                                            <div class="category"><a href="#">Business</a></div>
+                                        </div>
+                                        <a href="post.html">
+                                            <h3 class="h4">{{ art[_+1][0].title }}</h3></a>
+                                        <p class="text-muted">{{ art[_+1][0].content}}</p>
+                                        <div class="post-footer d-flex align-items-center"><a href="{{ url_for('jk.cont', id = art[_+1][0].aid) }}"
+                                                                                              class="author d-flex align-items-center flex-wrap">
+                                            <div class="avatar"><img src="/static/img/lolt.png" alt="..."
+                                                                     class="img-fluid"></div>
+                                            <div class="title"><span>John Doe</span></div>
+                                        </a>
+                                            <div class="date"><i class="icon-clock"></i> 2 months ago</div>
+                                            <div class="comments meta-last"><i class="icon-comment"></i>12</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="post col-xl-6">
+                                    <div class="post-thumbnail"><a href="post.html"><img src="/static/img/favicon.png"
+                                                                                         alt="..."
+                                                                                         class="img-fluid"></a>
+                                    </div>
+                                    <div class="post-details">
+                                        <div class="post-meta d-flex justify-content-between">
+                                            <div class="date meta-last">-- $$ | --</div>
+                                            <div class="category"><a href="#">Business</a></div>
+                                        </div>
+                                        <a href="post.html">
+                                            <h3 class="h4">宝宝没有</h3></a>
+                                        <p class="text-muted">莫得文章</p>
+                                        <div class="post-footer d-flex align-items-center"><a href="#"
+                                                                                              class="author d-flex align-items-center flex-wrap">
+                                            <div class="avatar"><img src="/static/img/favicon.png" alt="..."
+                                                                     class="img-fluid"></div>
+                                            <div class="title"><span>Watch Dog</span></div>
+                                        </a>
+                                            <div class="date"><i class="icon-clock"></i>long ago</div>
+                                            <div class="comments meta-last"><i class="icon-comment"></i>999+</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        <!-- Pagination -->
+{#                        <nav aria-label="Page navigation example">#}
+{#                            <ul class="pagination pagination-template d-flex justify-content-center">#}
+{#                                <li class="page-item"><a href="#" class="page-link"> <i#}
+{#                                        class="fa fa-angle-left"></i></a></li>#}
+{#                                <li class="page-item"><a href="#" class="page-link active">1</a></li>#}
+{#                                <li class="page-item"><a href="#" class="page-link">2</a></li>#}
+{#                                <li class="page-item"><a href="#" class="page-link">3</a></li>#}
+{#                                <li class="page-item"><a href="#" class="page-link"> <i#}
+{#                                        class="fa fa-angle-right"></i></a></li>#}
+{#                            </ul>#}
+{#                        </nav>#}
+                    </div>
+            </main>
+            <aside class="col-lg-4">
+                <!-- Widget [Search Bar Widget]-->
+                <div class="widget search">
+                    <header>
+                        <h3 class="h6">查找俱乐部</h3>
+                    </header>
+                    <form action="{{ url_for('jk.blog') }}" class="search-form" method="post">
+                        <div class="form-group">
+                            <input type="search" placeholder="你要找什么?" name="meg">
+                            <button type="submit" class="submit"><i class="icon-search"></i></button>
+                            <div class="form-group">
+                                {% for message in get_flashed_messages() %}
+                                    <div id="info">{{ message }}</div>
+                                {% endfor %}
+
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Widget [Latest Posts Widget]        -->
+                <div class="widget latest-posts">
+                    <header>
+                        <h3 class="h6">最近信息</h3>
+                    </header>
+                    <div class="blog-posts">
+                        {% for _ in ord_thcate %}
+                            <a href="{{ url_for('jk.cont', id = _.aid)}}">
+                                <div class="item d-flex align-items-center">
+                                    <div class="image"><img src="{{ _.picture }}" alt="..." class="img-fluid">
+                                    </div>
+                                    <div class="title"><strong>{{ _.title }}</strong>
+                                        <div class="d-flex align-items-center">
+                                            <div class="views"><i class="icon-eye"></i> 500</div>
+                                            <div class="comments"><i class="icon-comment"></i>12</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Widget [Categories Widget]-->
+                <div class="widget categories">
+                    <header>
+                        <h3 class="h6">Club 信息</h3>
+                    </header>
+                    {% for i  in cates %}
+                        <div class="item d-flex justify-content-between"><a
+                                href="{{ url_for('jk.blog' ,cid = i.cid ) }}">{{ i.name }}</a><span>{{ i.num }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- Widget [Tags Cloud Widget]-->
+                <div class="widget tags">
+                    <header>
+                        <h3 class="h6">标签</h3>
+                    </header>
+                    {% for _ in range(0,cate_len,2) %}
+                        <ul class="list-inline">
+                            <li class="list-inline-item"><a href="#" class="tag">#{{ cates[_].name }}</a></li>
+                            {% if _ < cate_len - 1 %}
+                                <li class="list-inline-item"><a href="#" class="tag">#{{ cates[_+1].name }}</a></li>
+                            {% endif %}
+                        </ul>
+                    {% endfor %}
+                </div>
+            </aside>
+        </div>
+    </div>
+{% endblock %}
