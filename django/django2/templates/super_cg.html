@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class=" js csstransforms3d">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>超管－超管</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/page.css">
+    <!--[if lte IE 8]>
+    <link href="/static/css/ie8.css" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/main.js"></script>
+    <script type="text/javascript" src="/static/js/modernizr.js"></script>
+    <!--[if IE]>
+    <script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+</head>
+
+<body style="background: #f6f5fa;">
+<!--content S-->
+<div class="super-content RightMain" id="RightMain">
+    <!--header-->
+    <div class="superCtab">
+        <div class="cg-title clearfix">
+            <a href="{% url 'App:wz_fb' %}" class="default-add-btn newPdBtn"><i class="ico-add"></i>创建文章</a>
+            <div class="searchBar">
+                <form action="{% url 'App:xwall' page=1 %}" method="get">
+                    <input type="text" id="" value="" name="search" class="form-control srhTxt"
+                           placeholder="输入标题关键字搜索">
+                    <input type="submit" class="srhBtn" value="">
+                </form>
+            </div>
+        </div>
+        <div class="cgsuperCtab">
+            <div class="Mian-cont-wrap">
+                <div class="defaultTab-T">
+                    <table border="0" cellspacing="0" cellpadding="0" class="defaultTable">
+                        <tbody>
+                        <tr>
+                            <th class="td_6">文章ID</th>
+                            <th class="td_7">文章名称</th>
+                            <th class="td_8">创建时间</th>
+                            <th class="td_9">点击量</th>
+                            <th class="td_10">操作</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <table border="0" cellspacing="0" cellpadding="0" class="defaultTable defaultTable2">
+                    {% for foo in pager.object_list %}
+
+
+
+                        <tbody>
+                        <tr>
+                            <td class="td_6">{{ foo.aid }}</td>
+                            <td class="td_7"><a
+                                    href="{% url 'App:ravise' aid=foo.aid cid=foo.cid.cid %}">{{ foo.title }}</a></td>
+                            <td class="td_8"><a
+                                    href="{% url 'App:ravise' aid=foo.aid cid=foo.cid.cid %}">{{ foo.create_time }}</a>
+                            </td>
+                            <td class="td_9"><a
+                                    href="{% url 'App:ravise' aid=foo.aid cid=foo.cid.cid %}">{{ foo.hits }}</a></td>
+                            <td class="td_10">
+                                <div class="btn"><a href="{% url 'App:ravise' aid=foo.aid cid=foo.cid.cid %}"
+                                                    class="modify cg-xiugai-a">修改</a></div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <!--pages S-->
+                <div class="pageSelect">
+                    <span>共 <b>{{ ca_at }}</b> 条 每页 <b>10 </b>条  {{ page }}/{{ paginator.num_pages }}</span>
+                    <div class="pageWrap">
+                        {% if page > 1 %}
+                            <a class="pagePre" href="{% url 'App:xwall' page=page|add:-1 %} "><i
+                                    class="ico-pre">&nbsp;</i></a>
+                        {% else %}
+                            <a class="pagePre" href="{% url 'App:xwall'  page=page %}"><i
+                                    class="ico-pre">&nbsp;</i></a>
+                        {% endif %}
+
+
+
+                        {% for foo in paginator.page_range %}
+
+                            {% if forloop.counter == page %}
+                                <a href="{% url 'App:xwall' page=foo %}"
+                                   class="pagenumb cur">{{ foo }}</a>
+                            {% else %}
+                                <a href="{% url 'App:xwall' page=foo %}"
+                                   class="pagenumb ">{{ foo }}</a>
+                            {% endif %}
+
+                        {% endfor %}
+
+                        {% if page < paginator.num_pages %}
+                            <a href="{% url 'App:xwall' page=page|add:1 %}" class="pagenext"><i
+                                    class="ico-next">&nbsp;</i></a>
+                        {% else %}
+                            <a href="{% url 'App:xwall' page=paginator.num_pages %}"
+                               class="pagenext"><i
+                                    class="ico-next">&nbsp;</i></a>
+                        {% endif %}
+                    </div>
+                </div>
+                <!--pages E-->
+            </div>
+
+        </div>
+    </div>
+    <!--main-->
+
+</div>
+<!--content E-->
+
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html class=" js csstransforms3d">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>博客管理</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/page.css">
+    {#    <!--[if lte IE 8]>#}
+    {#    <link href="/static/css/ie8.css" rel="stylesheet" type="text/css"/>#}
+    {#    <![endif]-->#}
+    {#    <script type="text/javascript" src="/static/js/jquery.min.js"></script>#}
+    {#    <script type="text/javascript" src="/static/js/main.js"></script>#}
+    {#    <script type="text/javascript" src="/static/js/modernizr.js"></script>#}
+    {#    <!--[if IE]>#}
+    {#    <script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>#}
+    {#    <![endif]-->#}
+</head>
+
+<body style="background: #f6f5fa;">
+
+<!--content S-->
+<div class="super-content RightMain" id="RightMain">
+
+    <!--header-->
+    <div class="superCtab">
+        <div class="tp-title clearfix">
+            <h3>博客管理</h3>
+            <div class="tp-mng-box clearfix">
+                {#					<a href="javascript:;" class="tp-zdy-a sp-column"><i class="ico-zdy"></i>自定义栏目名称</a>#}
+                <div class="tp-zhongduan">
+                    {% if username %}
+                        <span><a href="{% url 'App:index' %}">{{ username }}</a><i class="ico-tri"></i></span>
+                        <div class="hide-zd" style="display: none;"><a href="{% url 'App:logout' %}">退出</a></div>
+
+
+                    {% else %}
+                        <span><a href="{% url 'App:login' %}">登录</a><i class="ico-tri"></i></span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="ctab-Main">
+            <div class="ctab-Main-title">
+                <ul class="clearfix">
+                    <li class="cur"><a href="{% url 'App:index' %}">首页</a></li>
+                    <li><a href="{% url 'App:wz_xw' %}">活动管理</a></li>
+                    <li><a href="{% url 'App:wz_fb' %}">文章发布</a></li>
+                    <li><a href="{% url 'App:pictrue' page=1 %}">图片管理</a></li>
+                    <li><a href="{% url 'App:xwall' page=1 %}">文章总览</a></li>
+                    <li><a href="{% url 'App:tag' page=1 %}">标签管理</a></li>
+                    <li><a href="{% url 'App:zx' %}">咨询信息</a></li>
+                </ul>
+            </div>
+            <img src="/static/img/title.jpg" alt="">
+
+        </div>
+    </div>
+    <!--main-->
+
+</div>
+<!--content E-->
+
+
+<script type="text/javascript" src="js/zxxFile.js"></script>
+<script>
+    var params = {
+        fileInput: $("#fileImage").get(0),
+        upButton: $("#fileSubmit").get(0),
+        url: $("#uploadForm").attr("action"),
+        filter: function (files) {
+            var arrFiles = [];
+            for (var i = 0, file; file = files[i]; i++) {
+                if (file.type.indexOf("image") == 0) {
+                    if (file.size >= 512000) {
+                        alert('您这张"' + file.name + '"图片大小过大，应小于500k');
+                    } else {
+                        arrFiles.push(file);
+                    }
+                } else {
+                    alert('文件"' + file.name + '"不是图片。');
+                }
+            }
+            return arrFiles;
+        },
+        onSelect: function (files) {
+            var html = '', i = 0;
+            $("#preview").html('<div class="upload_loading"></div>');
+            var funAppendImage = function () {
+                file = files[i];
+                if (file) {
+                    var reader = new FileReader()
+                    reader.onload = function (e) {
+                        html = html + '<div class="xc-list tp-list"><div class="img"><a href="#"><img id="uploadImage_' + i + '" src="' + e.target.result + '" class="upload_image"/></a></div>' +
+                            '<div class="info clearfix"><h3>标题图片</h3><em class="top">置顶</em><span><input type="checkbox" id="checkbox_a' + i + '" class="chk_4"/><label for="checkbox_a' + i + '"></label></span></div>' +
+                            '<div class="input"><input type="text" class="txt txtbiaoti" value="' + file.name + '" /><h4>图片链接</h4><input type="text" class="txt" /></div>' +
+                            '<div class="btn clearfix"><a href="#" class="xc-bc-a">保存</a><a href="#" class="xc-delete-a upload_delete" href="javascript:" title="删除" data-index="' + i + '">删除</a></div>' +
+                            '</div>';
+                        i++;
+                        funAppendImage();
+
+                        $(".xc-delete-a").click(function () {
+                            $(this).parent().parent().remove();
+                        });
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    $("#preview").html(html);
+                    if (html) {
+                        //删除方法
+                        $(".xc-delete-a").click(function () {
+                            ZXXFILE.funDeleteFile(files[parseInt($(this).attr("data-index"))]);
+                            return false;
+                        });
+                        //提交按钮显示
+                        $("#fileSubmit").show();
+                    } else {
+                        //提交按钮隐藏
+                        $("#fileSubmit").hide();
+                    }
+                }
+            };
+            funAppendImage();
+        },
+        onDelete: function (file) {
+            $("#uploadList_" + file.index).fadeOut();
+        },
+        onDragOver: function () {
+            $(this).addClass("upload_drag_hover");
+        },
+        onDragLeave: function () {
+            $(this).removeClass("upload_drag_hover");
+        },
+        onProgress: function (file, loaded, total) {
+            var eleProgress = $("#uploadProgress_" + file.index), percent = (loaded / total * 100).toFixed(2) + '%';
+            eleProgress.show().html(percent);
+        },
+        onSuccess: function (file, response) {
+            $("#uploadInf").append("<p>上传成功，图片地址是：" + response + "</p>");
+        },
+        onFailure: function (file) {
+            $("#uploadInf").append("<p>图片" + file.name + "上传失败！</p>");
+            $("#uploadImage_" + file.index).css("opacity", 0.2);
+        },
+        onComplete: function () {
+            //提交按钮隐藏
+            $("#fileSubmit").hide();
+            //file控件value置空
+            $("#fileImage").val("");
+            $("#uploadInf").append("<p>当前图片全部上传完毕，可继续添加上传。</p>");
+        }
+    };
+    ZXXFILE = $.extend(ZXXFILE, params);
+    ZXXFILE.init();
+
+</script>
+
+</body>
+</html>

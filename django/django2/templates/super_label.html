@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class=" js csstransforms3d">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>超管－标签管理</title>
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/page.css">
+    <!--[if lte IE 8]>
+    <link href="/static/css/ie8.css" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/main.js"></script>
+    <script type="text/javascript" src="/static/js/modernizr.js"></script>
+    <!--[if IE]>
+    <script src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    <style>
+        .flash{
+            margin: 19px  20px 2%;
+        }
+    </style>
+</head>
+
+<body style="background: #f6f5fa;">
+<!--content S-->
+<div class="super-content RightMain" id="RightMain">
+
+    {#    <div class="super-header clearfix">#}
+    {#        <h2>标签管理</h2>#}
+    {#        <div class="head-right">#}
+    {#            <i class="ico-user"></i>当前用户：#}
+    {#            <div class="userslideDown">#}
+    {#                <a href="javascript:;" class="superUser">Admin<i class="ico-tri"></i></a>#}
+    {#                <div class="slidedownBox">#}
+    {#                    <ul>#}
+    {#                        <li><a href="#">修改密码</a></li>#}
+    {#                        <li><a href="#">退出</a></li>#}
+    {#                    </ul>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+    <!--header-->
+    <div class="superCtab">
+        <div class="cg-title clearfix">
+            <a href="javascript:;" class="default-add-btn newPdBtn"><i class="ico-add"></i>添加标签</a>
+            {% if flash %}
+                <div class="flash">{{ flash }}</div>
+            {% endif %}
+
+
+
+
+            <div class="searchBar">
+
+                <form action="{% url 'App:tag' page=1 %}" method="get">
+                    <input type="text" id="" value="" name="search" class="form-control srhTxt"
+                           placeholder="输入标题关键字搜索">
+                    <input type="submit" class="srhBtn" value="">
+                </form>
+            </div>
+
+        </div>
+        <div class="cgsuperCtab">
+            <div class="Mian-cont-wrap">
+                <div class="defaultTab-T">
+                    <table border="0" cellspacing="0" cellpadding="0" class="defaultTable">
+                        <tbody>
+                        <tr>
+                            <th class="td_6">标签ID</th>
+                            <th class="td_7 td_7_1">标签名称</th>
+                            <th class="td_10">操作</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <table border="0" cellspacing="0" cellpadding="0" class="defaultTable defaultTable2">
+                    <tbody>
+                    {% for foo in pager.object_list %}
+
+
+
+                        <tr>
+                            <td class="td_6">{{ foo.cid }}</td>
+                            <td class="td_7 td_7_1"><span class="label">{{ foo.name }}</span></td>
+                            <td class="td_10">
+                                <div class="btn">
+                                    {#                                    <a href="javascript:;" class="modify cg-xiugai-a">修改</a>#}
+                                    <a href="{% url 'App:tagdel' cid=foo.cid page=page %}" class="delete-a">删除</a>
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <!--pages S-->
+                <div class="pageSelect">
+                    <span>共 <b>{{ ca_at }}</b> 条 每页 <b>5 </b>条   {{ page }}/{{ paginator.num_pages }}</span>
+                    <div class="pageWrap">
+                        {% if page > 1 %}
+                            <a class="pagePre" href="{% url 'App:tag' page=page|add:-1 %} "><i
+                                    class="ico-pre">&nbsp;</i></a>
+                        {% else %}
+                            <a class="pagePre" href="{% url 'App:tag'  page=page %}"><i
+                                    class="ico-pre">&nbsp;</i></a>
+                        {% endif %}
+
+
+
+                        {% for foo in paginator.page_range %}
+
+                            {% if forloop.counter == page %}
+                                <a href="{% url 'App:tag' page=foo %}"
+                                   class="pagenumb cur">{{ foo }}</a>
+                            {% else %}
+                                <a href="{% url 'App:tag' page=foo %}"
+                                   class="pagenumb ">{{ foo }}</a>
+                            {% endif %}
+
+                        {% endfor %}
+
+                        {% if page < paginator.num_pages %}
+                            <a href="{% url 'App:tag' page=page|add:1 %}" class="pagenext"><i
+                                    class="ico-next">&nbsp;</i></a>
+                        {% else %}
+                            <a href="{% url 'App:tag' page=paginator.num_pages %}"
+                               class="pagenext"><i
+                                    class="ico-next">&nbsp;</i></a>
+                        {% endif %}
+                    </div>
+                </div>
+                <!--pages E-->
+            </div>
+
+        </div>
+    </div>
+    <!--main-->
+
+</div>
+<!--content E-->
+<form action="{% url 'App:tag' page=page %}" method="post">
+    {% csrf_token %}
+    <div class="layuiBg"></div><!--公共遮罩-->
+    <!--点击添加标签弹出-->
+    <div class="addFeileibox layuiBox newLabelBox">
+        <div class="layer-title clearfix"><h2>添加标签</h2><span class="layerClose"></span></div>
+        <div class="layer-content">
+            <dl class="PDlabel-list clearfix">
+                <dt>输入标签名称：</dt>
+                <dd><input type="text" class="txt" name="createname"></dd>
+            </dl>
+            <dl class="PDlabel-list clearfix">
+                <input type="submit" value="保存" class="saveBtn">
+            </dl>
+        </div>
+    </div>
+</form>
+{#<form action="{% url 'App:tagchange' page=page %}">#}
+{#    <!--点击修改弹出-->#}
+{#    <div class="xcXgBox layuiBox newLabelBox">#}
+{#        <div class="layer-title clearfix"><h2>修改</h2><span class="layerClose"></span></div>#}
+{#        <div class="layer-content">#}
+{#            <dl class="PDlabel-list clearfix">#}
+{#                <dt>修改标签名称：</dt>#}
+{#                <dd><input type="text" class="txt" name="chname"></dd>#}
+{#            </dl>#}
+{#            <dl class="PDlabel-list clearfix">#}
+{#                <input type="submit" value="保存" class="saveBtn">#}
+{#            </dl>#}
+{#        </div>#}
+{#    </div>#}
+
+</form>
+</body>
+</html>
